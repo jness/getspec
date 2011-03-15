@@ -1,4 +1,20 @@
 #
+# Getting Help
+#
+
+$ getspec --help
+
+usage: getspec [-h] [--changelog] package
+
+positional arguments:
+  package      IUS Package Name
+
+optional arguments:
+  -h, --help   show this help message and exit
+  --changelog  Print only the changelog
+
+
+#
 # Basic Usage
 #
 
