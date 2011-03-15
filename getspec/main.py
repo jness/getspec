@@ -7,7 +7,8 @@ from urllib2 import urlopen, HTTPError
 
 def get_link(package):
     '''get_link() retrieves the 'download file' link from the Launchpad files page'''
-    request = urlopen('http://bazaar.launchpad.net/~ius-coredev/ius/' + package + '/annotate/head%3A/SPECS/' + package +'.spec')
+    url = 'http://bazaar.launchpad.net/~ius-coredev/ius/' + package + '/annotate/head%3A/SPECS/' + package +'.spec'
+    request = urlopen(url)
     content = request.read()
     request.close()
     match = compile('<a href="(.*)">download file</a>').findall(content)
@@ -39,11 +40,11 @@ def get_changelog(spec):
         # If the changelog variable was set within title statement
         if changelog:
         
-            # We only want to pull the last 4 changelog entries
+            # We only want to pull the last 5 changelog entries
             blank = compile('^$').findall(line)
             if blank:
                 max_count += 1
-                if max_count == 4:
+                if max_count == 5:
                     sys.exit(0)
             
             print line,
