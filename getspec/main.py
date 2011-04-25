@@ -49,13 +49,36 @@ def get_changelog(spec):
             
             print line,
 
+def get_latestversion(spec):
+    '''get_latestversion() uses the get_download() and parses for the first line
+       below %changelog, it then grabs the version'''
+
+    linecount = 0
+    changelog = False
+
+    for line in spec:
+        linecount += 1
+        title = compile('%changelog').findall(line)
+
+        # If we found %changelog using regex
+        if title:
+            changelog = linecount
+            continue
+
+        if changelog:
+            version = compile(' ([\w.-]*)$').findall(line)
+            if version:
+                return version[0]
+            else:
+                return False
 
 def main():
 
     # Build my Parser with help for user input
     parser = argparse.ArgumentParser()
     parser.add_argument('package', help='IUS Package Name')
-    parser.add_argument('--changelog', action='store_true', help='Print only the changelog')
+    parser.add_argument('--changelog', '-c', action='store_true', help='Print only the changelog')
+    parser.add_argument('--version', '-v', action='store_true', help='Shows the latest SPEC version')
     args = parser.parse_args()
 
     # Check URL has data, if not Package does not exisit
@@ -71,6 +94,13 @@ def main():
     # If --changelog was passed the user only wants the changelog
     if args.changelog:
         get_changelog(spec)
+
+    # If --version was passed lets get the verson from SPEC
+    elif args.version:
+        version = get_latestversion(spec)
+        if version:
+            print args.package + '-' + version
+
     else:
     # If --changelog was NOT passed the user wants the entire SPEC
         for line in spec:
