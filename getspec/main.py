@@ -66,7 +66,7 @@ def get_latestversion(spec):
             continue
 
         if changelog:
-            version = compile(' ([\w.-:]*)$').findall(line)
+            version = compile('- (.*)$').findall(line)
             if version:
                 return version[0]
             else:
